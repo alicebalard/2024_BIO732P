@@ -1,0 +1,16 @@
+	STAR --runThreadN 64 --runMode genomeGenerate --genomeDir /data/scratch/btx915/data/genome/STAR/ --genomeFastaFiles /data/scratch/btx915/data/genome/Mus_musculus.GRCm39.dna.primary_assembly.fa --sjdbGTFfile /data/scratch/btx915/data/genome/Mus_musculus.GRCm39.111.gtf
+	STAR version: 2.7.9a   compiled: 2021-11-16T17:29:36+0000 sdv48:/data/scratch/aax086/autoinstall_star2.7.9a_gcc4.8.5/git_repo/source
+May 14 15:04:28 ..... started STAR run
+May 14 15:04:28 ... starting to generate Genome files
+May 14 15:05:05 ..... processing annotations GTF
+May 14 15:05:24 ... starting to sort Suffix Array. This may take a long time...
+May 14 15:05:36 ... sorting Suffix Array chunks and saving them to disk...
+May 14 15:10:23 ... loading chunks from disk, packing SA...
+May 14 15:11:14 ... finished generating suffix array
+May 14 15:11:14 ... generating Suffix Array index
+May 14 15:14:01 ... completed Suffix Array index
+May 14 15:14:01 ..... inserting junctions into the genome indices
+May 14 15:15:48 ... writing Genome to disk ...
+May 14 15:15:49 ... writing Suffix Array to disk ...
+May 14 15:15:56 ... writing SAindex to disk
+May 14 15:15:57 ..... finished successfully

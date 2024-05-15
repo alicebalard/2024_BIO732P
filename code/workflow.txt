@@ -1,0 +1,38 @@
+## Workflow to prepare data for course BIO732P
+## A. Balard May 2024
+
+## dl raw fastq reads
+dlFastq.sh
+
+## dl GRCm39 genome and gtf
+wget https://ftp.ensembl.org/pub/release-112/fasta/mus_musculus/dna/Mus_musculus.GRCm39.dna.primary_assembly.fa.gz
+wget https://ftp.ensembl.org/pub/release-112/gtf/mus_musculus/Mus_musculus.GRCm39.111.gtf.gz
+gunzip *.gz
+
+## build genome index for STAR
+buildSTARindex.sh
+
+## List samples for array
+for file in *pass_1* ; do echo "${file%%_*}" ; done > /data/scratch/btx915/data/sampleList50.txt
+
+## Aligning reads to the genome (and counting them at the same time!) 
+## see https://biocorecrg.github.io/RNAseq_course_2019/alnpractical.html
+alignWithSTAR.sh
+
+## Creat a matrix of expression for further DE analysis
+## https://biocorecrg.github.io/RNAseq_course_2019/differential_expression.html
+##  retrieve the 3rd column of each "ReadsPerGene.out.tab" file + the first column that contains the gene IDs
+paste *ReadsPerGene.out.tab | grep -v "_" | awk '{printf "%s\t", $1}{for (i=3;i<=NF;i+=4) printf "%s\t", $i; printf 
+"\n" }' > tmp
+## add header: "ID" + the name of each of the counts file
+sed -e "1iID\t$(ls *ReadsPerGene.out.tab | tr '\n' '\t' | sed 's/ReadsPerGene.out.tab//g')" tmp | cut -f1-51 > 
+../deseq2/raw_counts_matrix.txt
+# remove temporary file
+rm tmp
+
+## Prepare transcript-to-gene annotation file
+wget http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M35/gencode.vM35.annotation.gtf.gz
+zcat gencode.vM35.annotation.gtf.gz | awk -F "\t" 'BEGIN{OFS="\t"}{if($3=="transcript"){split($9, a, "\""); print 
+a[4],a[2],a[8]}}' > tx2gene.gencode.v35.csv
+
+
